@@ -21,19 +21,7 @@ This project demonstrates practical skills in **data engineering, automation, NL
 
 ## 🧱 Architecture Overview
 
-Cron Trigger (n8n)
-↓
-External APIs (AI News / Research)
-↓
-Data Cleaning & Normalization
-↓
-Keyword Extraction & Sentiment Analysis
-↓
-Google Sheets (Data Storage)
-↓
-Looker Studio (Visualization & Reporting)
-↓
-Scheduled PDF Report via Email
+Cron Trigger (n8n) -> External APIs (AI News / Research) -> Data Cleaning & Normalization -> Keyword Extraction & Sentiment Analysis -> Google Sheets (Data Storage) -> Looker Studio(Visualization & Reporting) -> Scheduled PDF Report via Email
 
 
 ---
