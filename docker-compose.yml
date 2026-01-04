@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  base:
+    build:
+      context: ./services/base
+    image: base:latest
+
+  summarizer:
+    build:
+      context: ./services/summarizer
+    image: summarizer:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - TRANSFORMERS_CACHE=/models
+    volumes:
+      - hf_cache:/models
+    depends_on:
+      - base
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  sentiment:
+    build:
+      context: ./services/sentiment
+    image: sentiment:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - TRANSFORMERS_CACHE=/models
+    volumes:
+      - hf_cache:/models
+    depends_on:
+      - base
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/docs"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    depends_on:
+      summarizer:
+        condition: service_healthy
+      sentiment:
+        condition: service_healthy
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
+  hf_cache:
